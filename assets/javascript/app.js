@@ -57,5 +57,38 @@ $("#add-user").on("click", function () {
       });
 
 
+      // Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
+    dataRef.ref().on("child_added", function(childSnapshot) {
+
+        // Log everything that's coming out of snapshot
+        console.log(childSnapshot.val().name);
+        console.log(childSnapshot.val().name)
+        console.log(childSnapshot.val().destination);
+        console.log(childSnapshot.val().time);
+        console.log(childSnapshot.val().frequency);
+        console.log(childSnapshot.val().dateAdded);
+  
+        // full list of items to the well
+        $("#train-schedule").append("<tr>" +
+          "<td class='train-name>" + childSnapshot.val().name +
+          " </td><td class='train-destination'> " + childSnapshot.val().destination +
+          " </span><td class='train-time'> " + childSnapshot.val().time +
+          " </td><td class='train-frequency'> " + childSnapshot.val().frequency +
+          " </td></tr>");
+  
+        // Handle the errors
+      }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+      });
+  
+      dataRef.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+        // Change the HTML to reflect
+        $("#name-display").text(snapshot.val().name);
+        $("#destination-display").text(snapshot.val().destination);
+        $("#time-display").text(snapshot.val().time);
+        $("#frequency-display").text(snapshot.val().frequency);
+      });
+  
+
     
 });

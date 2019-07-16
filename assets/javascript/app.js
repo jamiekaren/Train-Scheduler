@@ -30,27 +30,45 @@ $("form").submit(function (event) {
   console.log(trainName, currentDestination, trainTime, tFrequency);
 
   // Let's try this: 
-  firebase.database().ref('/').set({
+  firebase.database().ref('/').push({
     name: trainName,
     destination: currentDestination,
     first: trainTime,
     frequency: tFrequency
   });
 
-  $("#name-input").val("");
-  $("#destination-input").val("");
-  $("#time-input").val("");
-  $("#frequency-input").val("");
 
-  // let newTrain = {
-  //     name: trainName,
-  //     destination: currentDestination,
-  //     first: trainTime,
-  //     frequency: tFrequency
-  //   };
 
-  // Uploads employee data to the database
-  //dataRef.ref().push(newTrain);
+  // Firebase watcher + initial loader HINT: This code behaves similarly to .on("value")
+  firebase.database().ref().on("child_added", function(childSnapshot) {
 
+    // Log everything that's coming out of snapshot - working
+    console.log(childSnapshot.val().name);
+    console.log(childSnapshot.val().destination);
+    console.log(childSnapshot.val().first);
+    console.log(childSnapshot.val().frequency);
+   
+
+    // full list of items to the well - not working!
+    $("#train-schedule").append("<tr><td> " +
+      childSnapshot.val().name +
+      " </td><td> " + childSnapshot.val().destination +
+      " </td><td> " + childSnapshot.val().first +
+      " </td><td> " + childSnapshot.val().frequency +
+      " </td></tr>");
+
+    // Handle the errors
+  }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
+
+
+    //empty input form area
+    $("#name-input").val("");
+    $("#destination-input").val("");
+    $("#time-input").val("");
+    $("#frequency-input").val("");
+
+ 
 });
 

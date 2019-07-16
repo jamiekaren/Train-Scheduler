@@ -13,18 +13,17 @@ let firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Comment this for now please
 // let dataRef = firebase.database();
 
 
-$("form").on("click", "button", function (event) {
+$("form").submit(function (event) {
   event.preventDefault();
 
   //check on-click event is working
   console.log("Form on click working!");
 
   let trainName = $("#name-input").val();
-  let currentDestination = $("destination-input").val();
+  let currentDestination = $("#destination-input").val();
   let trainTime = $("#time-input").val();
   let tFrequency = $("#frequency-input").val();
 
